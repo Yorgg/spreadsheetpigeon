@@ -1,24 +1,19 @@
-# README
+# SpreadsheetPigeon
+A simple API proxy for accessing Google Spreadsheets data.
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+## Endpoints 
+Relative to: https://spreadsheet-pigeon.herokuapp.com
 
-Things you may want to cover:
+* **GET**  /spreadsheet
 
-* Ruby version
+Returns data for a spreadsheet and requires the following parameters:
 
-* System dependencies
+* **s_id=**spreadsheet_id (ID of the spreadsheet)
 
-* Configuration
+* **range=**range (Range of data)  
 
-* Database creation
+### example
+https://spreadsheet-pigeon.herokuapp.com/spreadsheet?s_id=12345&range=sheet1
 
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+## Why?
+Useful for very basic SPA's (githubpages), as the client can make ajax requests without worrying about API key security or CORS issues.  
