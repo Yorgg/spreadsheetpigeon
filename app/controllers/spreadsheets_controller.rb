@@ -1,7 +1,12 @@
 class SpreadsheetsController < ApplicationController
   def show
-    spreadsheet = SpreadsheetRequest.new(id: params[:s_id], 
+    spreadsheet = SpreadsheetService::Get.new(
+                                      id: params[:s_id], 
                                       range: params[:range])
-    render json: spreadsheet.data
+    if spreadsheet.request_error
+      render json: spreadsheet.request_error
+    else
+      render json: spreadsheet.data
+    end
   end
 end

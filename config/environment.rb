@@ -2,7 +2,7 @@
 require_relative 'application'
 
 #Load Google Api Key Environment Variable
-if Rails.env.development? 
+if !Rails.env.production? 
   load File.join(Rails.root, 'config', 'google_api_key.rb')
 end
 
