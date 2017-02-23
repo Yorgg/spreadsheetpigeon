@@ -1,23 +1,45 @@
 require_relative '../rails_helper.rb'
- 
-describe SpreadsheetService do 
-  before(:each) do
-    stub_request(:get, /#{SpreadsheetService::API_URL}/).
-      to_return(status: 200, body: "data", headers: {})
+
+SERVICE = SpreadsheetService 
+
+describe SERVICE do 
+  let(:spreadsheet_id) { 13 }
+  let(:range) { 'sheet1' }
+  subject(:response) do
+    SERVICE::Get.new(
+      id:    spreadsheet_id, 
+      range: range) 
+  end 
+
+  before do
+    #Webmock, successful get 
+    stub_request(:get, /#{SERVICE::API_URL}/)
+      .to_return(status: 200, body: 'webmock-data', headers: {})
   end
 
-  context 'When get request sent' do 
-    it 'returns a request error 404' do
-      response = SpreadsheetService::Get.new(id: 13, range: 'sheet1')
-      expect(response.data).to include('data')   
+  context 'Bad Get request' do 
+    before do
+      #Webmock, unsuccessful get
+      stub_request(:get, /#{SERVICE::API_URL}/)
+        .to_raise(StandardError)
+    end
+    it 'returns the error message' do 
+      expect(response.request_error).to include('StandardError')  
+    end 
+  end
+
+  context 'Successful Get request' do 
+    it 'returns the response data' do
+      expect(response.data).to include('webmock-data')   
     end
   end
 
-  context 'When API_KEY is missing' do 
+  context 'API_KEY missing' do 
     it 'raises a ConfigError' do
-      SpreadsheetService::API_KEY = nil
-      request = ->() {SpreadsheetService::Get.new(id: 13, range: 'sheet1')}
-      expect(request).to raise_error(SpreadsheetService::ConfigError)   
+      SERVICE::API_KEY = nil
+      expect { response }.to raise_error(
+        SERVICE::ConfigError
+      )   
     end
   end
 end

@@ -6,6 +6,7 @@ git_source(:github) do |repo_name|
 end
 
 group :development, :test do 
+  gem 'pry'
   gem 'webmock'
   gem 'rspec-rails'
 end

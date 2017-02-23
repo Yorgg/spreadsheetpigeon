@@ -10,15 +10,9 @@ module SpreadsheetService
     end 
   end
 
-  ## 
-  ##Send GET requests to api
-  #
+  ##Send GET requests to Google Spreadsheet api
   class Get 
     attr_accessor :data, :request_error
-
-    def self.api
-      API_KEY
-    end
 
     def initialize(range:, id:)
       raise ConfigError if !API_KEY || !API_URL
@@ -31,7 +25,8 @@ module SpreadsheetService
       begin
 	dataRequest = open(path(id,range)).read 
         self.data = dataRequest
-      rescue Exception => e
+      rescue => e
+        #rescues OpenUri error and saves error message
 	self.request_error = e.inspect 
       end
     end
@@ -41,9 +36,6 @@ module SpreadsheetService
     end
   end
   
-  #### 
-  ##Send POST requests to api
-  #
   class Post
     #for future functionality if needed
   end
