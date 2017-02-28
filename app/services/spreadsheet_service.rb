@@ -1,42 +1,27 @@
 require 'open-uri'
 
-module SpreadsheetService
+class SpreadsheetService
   API_KEY = ENV.fetch('GOOGLE_API_KEY') 
   API_URL = 'https://sheets.googleapis.com/v4'
+  
+  class ConfigError < StandardError; end
 
-  class ConfigError < StandardError
-    def initialize(msg = "API-KEY or API-Path is missing!")
-      super
-    end 
+  def initialize
+    raise ConfigError if !API_KEY || !API_URL
   end
 
-  ##Send GET requests to Google Spreadsheet api
-  class Get 
-    attr_accessor :data, :request_error
-
-    def initialize(range:, id:)
-      raise ConfigError if !API_KEY || !API_URL
-      request(range, id.to_s)
-    end
-
-  private 
-
-    def request(range, id)
-      begin
-	dataRequest = open(path(id,range)).read 
-        self.data = dataRequest
-      rescue => e
-        #rescues OpenUri error and saves error message
-	self.request_error = e.inspect 
-      end
-    end
-
-    def path(id, range)
-      "#{API_URL}/spreadsheets/#{id}/values/#{range}?key=#{API_KEY}" 
+  #Send GET request to Google Spreadsheet api
+  def get(range:, id:)
+    begin
+      open(get_request_path(range,id)).read 
+    rescue => e
+      e.inspect 
     end
   end
   
-  class Post
-    #for future functionality if needed
+  private
+
+  def get_request_path(range, id)
+    "#{API_URL}/spreadsheets/#{id}/values/#{range}?key=#{API_KEY}" 
   end
 end

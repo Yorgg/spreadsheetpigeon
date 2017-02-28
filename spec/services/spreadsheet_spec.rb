@@ -5,10 +5,9 @@ SERVICE = SpreadsheetService
 describe SERVICE do 
   let(:spreadsheet_id) { 13 }
   let(:range) { 'sheet1' }
+
   subject(:response) do
-    SERVICE::Get.new(
-      id:    spreadsheet_id, 
-      range: range) 
+    SERVICE.new.get(id: spreadsheet_id, range: range) 
   end 
 
   before do
@@ -24,13 +23,13 @@ describe SERVICE do
         .to_raise(StandardError)
     end
     it 'returns the error message' do 
-      expect(response.request_error).to include('StandardError')  
+      expect(response).to include('StandardError')  
     end 
   end
 
   context 'Successful Get request' do 
     it 'returns the response data' do
-      expect(response.data).to include('webmock-data')   
+      expect(response).to include('webmock-data')   
     end
   end
 

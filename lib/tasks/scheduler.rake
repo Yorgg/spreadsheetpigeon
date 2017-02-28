@@ -3,8 +3,12 @@ require 'net/http'
 namespace :ping do 
   desc "This task is called by the Heroku scheduler add-on"
   task :start => :environment do
-    http = Net::HTTP.new 'spreadsheet-pigeon.herokuapp.com'
-    puts http.request_get('/')
+    begin
+      uri = URI('http://spreadsheetpigeon1.herokuapp.com/spreadsheet')
+      http = Net::HTTP.new uri 
+    rescue Exception => e   
+      puts e
+    end   
   end
 end
 
