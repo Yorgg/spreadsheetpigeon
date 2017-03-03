@@ -22,8 +22,8 @@ describe SERVICE do
       stub_request(:get, /#{SERVICE::API_URL}/)
         .to_raise(StandardError)
     end
-    it 'returns the error message' do 
-      expect(response).to include('StandardError')  
+    it 'returns empty' do 
+      expect(response).to include('error fetching')  
     end 
   end
 

@@ -15,7 +15,7 @@ class SpreadsheetService
     begin
       open(get_request_path(range,id)).read 
     rescue => e
-      e.inspect 
+      "error fetching spreadsheet id #{id} with range #{range}" 
     end
   end
   
